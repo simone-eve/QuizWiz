@@ -1,3 +1,7 @@
+using Microsoft.Extensions.Configuration;
+using Google.Cloud.Firestore;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace QuizWizAPI
 {
@@ -7,16 +11,20 @@ namespace QuizWizAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Configure Firestore (replace with your approach)
+            string projectId = Environment.GetEnvironmentVariable("Firestore:ProjectId"); // Or use Configuration
+            var credentials = GoogleCredential.FromFile("path/to/your/serviceAccount.json"); // Replace with your service account path
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Add Firestore service with credentials
+            //builder.Services.AddFirestore(db => db.EnablePersistence = true) // Optional: Enable persistence
+            //    .AddCredential(credentials);
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -24,9 +32,7 @@ namespace QuizWizAPI
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
 
             app.MapControllers();
 
